@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:munchmap_prototype/screens/bookmark.dart';
 import 'package:munchmap_prototype/screens/settings.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
@@ -41,17 +42,16 @@ class _ProfilePageState extends State<ProfilePage> {
                         // Bookmarks Icon
                         InkWell(
                           onTap: () {
-                            // Redirect to BookmarksPage
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => BookmarksPage()),
-                            // );
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => const BookmarkPage()),
+                            );
                           },
                           child: Row(
                             children: [
                               Image.asset('assets/icons/bookmark_icon.png', height: 30),
                               const SizedBox(width: 8), 
-                              Text('Bookmarksz',
+                              Text('Bookmarks',
                                 style: TextStyle(
                                   fontFamily: GoogleFonts.montserrat().fontFamily,
                                   fontWeight: FontWeight.w500,
@@ -107,24 +107,14 @@ class _ProfilePageState extends State<ProfilePage> {
                         ),
 
                         Container(
-                          color: const Color.fromARGB(255, 235, 235, 235),
+                          color: Colors.white,
                           height: 350,
                           width: 400,
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 100,                              
-                                color: Colors.white,
-                                child: const Text('Name of business listing 1'),
+                          child: Container(
+                            height: 100,                              
+                            color: Colors.white,
+                            child: Center(child: const Text("You don't have any listings yet...")),
 
-                              ),
-                              const SizedBox(height: 10),
-                              Container(
-                                height: 100, 
-                                color: Colors.white,
-                                child: const Text('Name of business listing 2'),
-                              ),
-                            ],
                           ),
                         ),
 
@@ -139,7 +129,6 @@ class _ProfilePageState extends State<ProfilePage> {
                           alignment: Alignment.bottomRight,
                           child: ElevatedButton(
                             onPressed: () {
-                              // Add your button onPressed logic here
                             },
                             style: ElevatedButton.styleFrom(
                               shape: const CircleBorder(),

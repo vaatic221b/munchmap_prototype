@@ -28,137 +28,21 @@ class _BookmarkPageState extends State<BookmarkPage> {
           child: SingleChildScrollView(
             child: Column(
               children: [
-                Container(
-                  height: 650,
-                  decoration: const BoxDecoration(
-                    color: Colors.white,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // Bookmarks Icon
-                        InkWell(
-                          onTap: () {
-                            // Redirect to BookmarksPage
-                            // Navigator.push(
-                            //   context,
-                            //   MaterialPageRoute(builder: (context) => BookmarksPage()),
-                            // );
-                          },
-                          child: Row(
-                            children: [
-                              Image.asset('assets/icons/bookmark_icon.png', height: 30),
-                              const SizedBox(width: 8), 
-                              Text('Bookmarks',
-                                style: TextStyle(
-                                  fontFamily: GoogleFonts.montserrat().fontFamily,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                )
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 5),
-                        // Settings Icon
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const SettingsPage()),
-                            );
-                          },
-                          child: Row(
-                            children: [
-                              const SizedBox(width: 3),
-                              Image.asset('assets/icons/settings_icon.png', height: 32),
-                              const SizedBox(width: 9), 
-                              Text('Settings',
-                                style: TextStyle(
-                                  fontFamily: GoogleFonts.montserrat().fontFamily,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 15,
-                                )
-                              ),
-                            ],
-                          ),
-                        ),
-
-                        const SizedBox(height: 10),
-
-                        const Divider(
-                          color: Colors.black,
-                          thickness: 1,
-                        ),
-
-                        const SizedBox(height: 5),
-  
-                        Text(
-                          'Your Listings:',
-                          style: TextStyle(
-                            fontFamily: GoogleFonts.montserrat().fontFamily,
-                            fontWeight: FontWeight.w800,
-                            fontSize: 18,
-                            color: const Color(0xFFFF2215)
-
-                          ),
-                        ),
-
-                        Container(
-                          color: const Color.fromARGB(255, 235, 235, 235),
-                          height: 350,
-                          width: 400,
-                          child: Column(
-                            children: [
-                              Container(
-                                height: 100,                              
-                                color: Colors.white,
-                                child: const Text('Name of business listing 1'),
-
-                              ),
-                              const SizedBox(height: 10),
-                              Container(
-                                height: 100, 
-                                color: Colors.white,
-                                child: const Text('Name of business listing 2'),
-                              ),
-                            ],
-                          ),
-                        ),
-
-
-                        const SizedBox(height: 10),
-
-                        Center(child: businessButton(context)),
-
-                        const SizedBox(height: 15),
-                        
-                        Align(
-                          alignment: Alignment.bottomRight,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              // Add your button onPressed logic here
-                            },
-                            style: ElevatedButton.styleFrom(
-                              shape: const CircleBorder(),
-                            ),
-                            child: Image.asset(
-                              'assets/icons/support_icon.png',
-                              width: 50,
-                              height: 50,
-                            ),
-                          ),
-                        ),
-
-
-                        const Spacer(),
-
-                        
-                      ],
-                    )
-
+                const SizedBox(height: 5),
+                Text('Bookmarks', 
+                style: GoogleFonts.montserrat(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 20,
+                  color: const Color(0xFFFF2215)
+                )),
+                const SizedBox(height: 2),
+                Padding(
+                  padding: const EdgeInsets.all(15.0),
+                  child: Container(
+                    height: 580,
+                    decoration: const BoxDecoration(
+                      color: Colors.amber,
+                    ),
                   ),
                 ),
                 

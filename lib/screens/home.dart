@@ -1,3 +1,5 @@
+
+
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:munchmap_prototype/models/munch_model.dart';
@@ -13,16 +15,20 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> homeScaffold = GlobalKey<ScaffoldState>();
+  List<MunchModel> diningOptions = [];
+
+  void _getDiningOptions(){
+    diningOptions = MunchModelList.getDiningOptions();
+  }
 
   @override
   Widget build(BuildContext context) {
+    _getDiningOptions();
     return Scaffold(
       drawer: menuOptions(context),
       key: homeScaffold,
-      endDrawer: rightDrawer(),
       body: Stack(
         children: [
-
           mapDisplay(),
           topBar(homeScaffold, context),
           foodDiscovery(),
@@ -102,7 +108,7 @@ class _HomePageState extends State<HomePage> {
   }
 
 
-//METHODS
+
 
   Container mapDisplay() {
     return Container(
@@ -117,8 +123,6 @@ class _HomePageState extends State<HomePage> {
   }
   
 Widget nearbyMunch() {
-  List<MunchModel> diningOptions = MunchModelList.getDiningOptions();
-
   return Container(
     color: Colors.white,
     child: ListView.separated(
@@ -127,16 +131,31 @@ Widget nearbyMunch() {
       padding: const EdgeInsets.only(left: 10, right: 10),
       separatorBuilder: (context, index) => const SizedBox(width: 25),
       itemBuilder: (context, index) {
-        MunchModel munchModel = diningOptions[index];
-
         return InkWell(
           onTap: () {
-            homeScaffold.currentState?.openEndDrawer();
+            showModalBottomSheet(
+              context: context,
+              builder: (context) => RightDrawer(
+                bgPath: diningOptions[index].bgPath,
+                name: diningOptions[index].name,
+                avgRating: diningOptions[index].avgRating,
+                address: diningOptions[index].address,
+                status: diningOptions[index].status,
+                shopHours: diningOptions[index].shopHours,
+                priceRange: diningOptions[index].priceRange,
+                gallery1: diningOptions[index].gallery1,
+                gallery2: diningOptions[index].gallery2,
+                gallery3: diningOptions[index].gallery3,
+                tag1: diningOptions[index].tag1,
+                tag2: diningOptions[index].tag2,
+                tag3: diningOptions[index].tag3
+              ),
+            );
           },
           child: Material(
             elevation: 1,
             borderRadius: BorderRadius.circular(20),
-            child: cardContents(munchModel),
+            child: cardContents(index),
           ),
         );
       },
@@ -144,7 +163,7 @@ Widget nearbyMunch() {
   );
 }
 
-Column cardContents(MunchModel munchModel) {
+Column cardContents(int index) {
   return Column(
     children: [
       Container(
@@ -152,7 +171,7 @@ Column cardContents(MunchModel munchModel) {
         width: 130,
         decoration: BoxDecoration(
           image: DecorationImage(
-            image: AssetImage(munchModel.bgPath),
+            image: AssetImage(diningOptions[index].bgPath),
             fit: BoxFit.cover,
           ),
           borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
@@ -164,7 +183,7 @@ Column cardContents(MunchModel munchModel) {
           width: 130,
           padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Text(
-            munchModel.name,
+            diningOptions[index].name,
             style: GoogleFonts.montserrat(
               fontSize: 12,
               fontWeight: FontWeight.w600,
@@ -181,26 +200,42 @@ Column cardContents(MunchModel munchModel) {
 
   
 Widget hiddenGems() {
-  List<MunchModel> hiddenGemsList = MunchModelList.getDiningOptions(); // Assuming you have a different list for hidden gems
 
   return Container(
     color: Colors.white,
     child: ListView.separated(
-      itemCount: hiddenGemsList.length,
+      itemCount: diningOptions.length,
       scrollDirection: Axis.horizontal,
       padding: const EdgeInsets.only(left: 10, right: 10),
       separatorBuilder: (context, index) => const SizedBox(width: 25),
       itemBuilder: (context, index) {
-        MunchModel munchModel = hiddenGemsList[index];
 
         return InkWell(
           onTap: () {
-            homeScaffold.currentState?.openEndDrawer();
+            showModalBottomSheet(
+              context: context,
+              builder: (context) => RightDrawer(
+                bgPath: diningOptions[index].bgPath,
+                name: diningOptions[index].name,
+                avgRating: diningOptions[index].avgRating,
+                address: diningOptions[index].address,
+                status: diningOptions[index].status,
+                shopHours: diningOptions[index].shopHours,
+                priceRange: diningOptions[index].priceRange,
+                gallery1: diningOptions[index].gallery1,
+                gallery2: diningOptions[index].gallery2,
+                gallery3: diningOptions[index].gallery3,
+                tag1: diningOptions[index].tag1,
+                tag2: diningOptions[index].tag2,
+                tag3: diningOptions[index].tag3
+              ),
+            );
           },
+
           child: Material(
             elevation: 1,
             borderRadius: BorderRadius.circular(20),
-            child: cardContents(munchModel),
+            child: cardContents(index),
           ),
         );
       },
@@ -208,17 +243,365 @@ Widget hiddenGems() {
   );
 }
 
-  
-  Drawer rightDrawer() {
+}
+
+class RightDrawer extends StatefulWidget {
+  final String bgPath;
+  final String name;
+  final double avgRating;
+  final String address;
+  final Status status;
+  final String shopHours;
+  final PriceRange priceRange;
+  final String gallery1;
+  final String gallery2;
+  final String gallery3;
+  final String tag1;
+  final String tag2;
+  final String tag3;
+
+  const RightDrawer({super.key, 
+    required this.bgPath,
+    required this.name,
+    required this.avgRating,
+    required this.address,
+    required this.status,
+    required this.shopHours,
+    required this.priceRange,
+    required this.gallery1,
+    required this.gallery2,
+    required this.gallery3,
+    required this.tag1,
+    required this.tag2,
+    required this.tag3,
+  });
+
+  @override
+  _RightDrawerState createState() => _RightDrawerState();
+}
+
+class _RightDrawerState extends State<RightDrawer> {
+  bool isBookmarked = false;
+
+  @override
+  Widget build(BuildContext context) {
     return Drawer(
       child: Container(
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/sampleDetails.png'), 
-                        fit: BoxFit.cover,
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.only(left: 10, right: 10),
+          child: Column(
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Container(
+                  color: Colors.white,
+                  width: 400,
+                  height: 50,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: Container(
+                          padding: const EdgeInsets.only(left: 10),
+                          child: Text(
+                            widget.name,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.black,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
                       ),
-                    ),        
-      )
+                      IconButton(
+                        iconSize: 35.0,
+                        icon: Icon(
+                          Icons.bookmark,
+                          color: isBookmarked ? Colors.red : Color.fromARGB(255, 218, 214, 214),
+                        ),
+                        onPressed: () {
+                          setState(() {
+                            isBookmarked = !isBookmarked;
+                          });
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              
+              const SizedBox(height: 10),
+        
+              Row(
+                children: [
+                  Container(
+                    height: 180,
+                    width: 180,
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: AssetImage(widget.bgPath),
+                        fit: BoxFit.cover, 
+                      ),
+                      borderRadius: BorderRadius.circular(20)
+                    ),
+                  ),
+
+        
+                  const SizedBox(width: 10),
+        
+                Container(
+                  color: Colors.white,
+                  height: 190,
+                  width: 180,
+                  child: Column(
+                    children: [
+                       SizedBox(
+                        width: 170,
+                        height: 40,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            makeTag(widget.tag1),
+                            const SizedBox(width: 5),
+                            makeTag(widget.tag2),
+                            const SizedBox(width: 5),
+                            makeTag(widget.tag3),
+                          ],
+                        )
+
+                      ),
+
+                      const SizedBox(width: 10),
+
+                      SizedBox(
+                        width: 170,
+                        height: 40,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 35,
+                              height: 35,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/icons/clock_icon.png'), 
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  widget.status == 'open' ? 'Open' : 'Closed',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: widget.status == 'open' ? Colors.green : const Color(0xFFFF2215),
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+                                Text(widget.shopHours,
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 13
+                                ),),
+                              ],
+                            )
+                          ],
+                        ),
+
+                      ),
+
+                      const SizedBox(height: 15),
+                      SizedBox(
+                        width: 170,
+                        height: 40,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Container(
+                              width: 30,
+                              height: 30,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/icons/wallet_icon.png'), 
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  'Budget range',
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.black
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+                                Text(widget.priceRange.toString(),
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 13
+                                ),),
+                              ],
+                            )
+                          ],
+                        ),
+
+                      ),
+
+                      const SizedBox(height: 15),
+
+                      SizedBox(
+                        width: 170,
+                        height: 40,
+                        child: Row(
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          children: [
+                            Container(
+                              width: 35,
+                              height: 35,
+                              decoration: const BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage('assets/icons/gallery_icon.png'), 
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 5),
+                            Text(
+                              'Gallery',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            )
+                          ],
+                        ),
+
+                      ),                    
+                    ],
+                  ),
+                ),
+                ],
+              ),
+
+              Row(
+                children: [   
+                  Container(
+                    color: Colors.white,
+                    height: 160,
+                    width: 180,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      children: [
+                        buildGalleryImage(widget.gallery1),
+                        const SizedBox(width: 8), 
+                        buildGalleryImage(widget.gallery2),
+                        const SizedBox(width: 8),
+                        buildGalleryImage(widget.gallery3),
+                      ],
+                    ),
+                  ),
+
+                  const SizedBox(width: 10),
+
+                  Container(
+                    color: Colors.white,
+                    height: 140,
+                    width: 160,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Image.asset(
+                              'assets/icons/review_icon.png',
+                              width: 30, 
+                              height: 30, 
+                            ),
+                            const SizedBox(width: 8),
+                            Text('Reviews',
+                              style: GoogleFonts.montserrat(
+                                fontWeight: FontWeight.bold,
+                                fontSize: 16
+                              ),
+                            ),
+                            const SizedBox(width: 15),
+                            Image.asset(
+                              'assets/icons/right_icon.png',
+                              width: 20, 
+                              height: 20, 
+                            ),
+                          ],
+                        ),
+                        ElevatedButton(
+                          onPressed: () {
+                            
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFF2215),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                          child: Text(
+                            "Let's Go",
+                            style: GoogleFonts.montserrat(
+                              color: Colors.white,
+                              fontWeight: FontWeight.bold,
+                              fontSize: 14
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ],
+              ),
+       
+              const SizedBox(height: 10),
+            ],
+          ),
+        ),
+      ),
     );
   }
+}
+
+Widget buildGalleryImage(String imagePath) {
+  return Container(
+    width: 170, 
+    height: 150, 
+    decoration: BoxDecoration(
+      image: DecorationImage(
+        image: AssetImage(imagePath), 
+        fit: BoxFit.cover, 
+      ),
+      borderRadius: BorderRadius.circular(40)
+    ),
+  );
+}
+
+Widget makeTag(String tag) {
+  return Container(
+    padding: EdgeInsets.all(6),
+    decoration: BoxDecoration(
+      color: Colors.black,
+      borderRadius: BorderRadius.circular(12),
+    ),
+    child: Text(
+      tag,
+      style: const TextStyle(
+        fontSize: 12,
+        color: Colors.white,
+      ),
+    ),
+  );
 }
