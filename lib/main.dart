@@ -4,9 +4,6 @@ import 'package:munchmap_prototype/models/munch_model.dart';
 import 'package:munchmap_prototype/screens/welcome.dart';
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await Hive.initFlutter();
-  await openHiveBoxAndAddData();
 
   runApp(const MainApp());
 }
