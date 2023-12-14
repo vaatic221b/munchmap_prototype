@@ -84,7 +84,7 @@ Widget build(BuildContext context) {
                           ),),
                         ),
                         Center(
-                          child: Text('Managed Listings: 2',
+                          child: Text('Managed Listings: 0',
                           style: GoogleFonts.montserrat(
                             fontSize: 12,
                             fontWeight: FontWeight.w600,
