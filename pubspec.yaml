@@ -9,7 +9,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
   google_fonts: ^6.1.0
   smooth_page_indicator: ^1.1.0
   dio: ^5.3.4
