@@ -366,7 +366,7 @@ Widget build(BuildContext context) {
                       width: 130,
                       decoration: const BoxDecoration(
                         image: DecorationImage(
-                          image: AssetImage('assets/images/sampleDine2.png'),
+                          image: AssetImage('assets/images/nogallery.png'),
                           fit: BoxFit.cover,
                         ),
                       ),

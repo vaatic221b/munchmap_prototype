@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:munchmap_prototype/models/munch_model.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
 
@@ -115,91 +116,98 @@ class _HomePageState extends State<HomePage> {
         );
   }
   
-  Widget nearbyMunch() {
-    return Container(
-      color: Colors.white,
-      child: ListView.separated(
-        itemCount: 4,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        separatorBuilder: (context, index) => const SizedBox(width: 25),
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              homeScaffold.currentState?.openEndDrawer();
-            },
-            child: Material(
-              elevation: 1,
-              borderRadius: BorderRadius.circular(20),
-              child: cardContents(),
-            ),
-          );
-        },
+Widget nearbyMunch() {
+  List<MunchModel> diningOptions = MunchModelList.getDiningOptions();
+
+  return Container(
+    color: Colors.white,
+    child: ListView.separated(
+      itemCount: diningOptions.length,
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      separatorBuilder: (context, index) => const SizedBox(width: 25),
+      itemBuilder: (context, index) {
+        MunchModel munchModel = diningOptions[index];
+
+        return InkWell(
+          onTap: () {
+            homeScaffold.currentState?.openEndDrawer();
+          },
+          child: Material(
+            elevation: 1,
+            borderRadius: BorderRadius.circular(20),
+            child: cardContents(munchModel),
+          ),
+        );
+      },
+    ),
+  );
+}
+
+Column cardContents(MunchModel munchModel) {
+  return Column(
+    children: [
+      Container(
+        height: 100,
+        width: 130,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            image: AssetImage(munchModel.bgPath),
+            fit: BoxFit.cover,
+          ),
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(25)),
+        ),
       ),
-    );
-  }
+      const SizedBox(height: 2),
+      Expanded(
+        child: Container(
+          width: 130,
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Text(
+            munchModel.name,
+            style: GoogleFonts.montserrat(
+              fontSize: 12,
+              fontWeight: FontWeight.w600,
+              color: const Color(0xFFFF2215),
+            ),
+            overflow: TextOverflow.ellipsis,
+            maxLines: 2,
+          ),
+        ),
+      ),
+    ],
+  );
+}
 
-  Column cardContents() {
-    return Column(
-                children: [
-                  Container(
-                    height: 100,
-                    width: 130,
-                    decoration: const BoxDecoration(
-                      image: DecorationImage(
-                        image: AssetImage('assets/images/sampleDine2.png'), 
-                        fit: BoxFit.cover,
-                      ),
-                      borderRadius: BorderRadius.vertical(top: Radius.circular(25)),
-                    ),
-                  ),
-
-                  const SizedBox(height: 2),
-
-                  Expanded(
-                    child: Container(
-                      width: 130,
-                      padding: const EdgeInsets.symmetric(horizontal: 10),
-                      child: Text(
-                        'Name of Dining Option',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 12,
-                          fontWeight: FontWeight.w600,
-                          color: const Color(0xFFFF2215),
-                        ), 
-                        overflow: TextOverflow.ellipsis,
-                        maxLines: 2, 
-                      ),
-                    ),
-                  ),
-                ],
-              );
-  }
   
-  Widget hiddenGems() {
-    return Container(
-      color: Colors.white,
-      child: ListView.separated(
-        itemCount: 4,
-        scrollDirection: Axis.horizontal,
-        padding: const EdgeInsets.only(left: 10, right: 10),
-        separatorBuilder: (context, index) => const SizedBox(width: 25),
-        itemBuilder: (context, index) {
-          return InkWell(
-            onTap: () {
-              homeScaffold.currentState?.openEndDrawer();
-            },
-            child: Material(
-              elevation: 1,
-              borderRadius: BorderRadius.circular(20),
-              child: cardContents(),
-            ),
-          );
-        },
-      ),
-    );
-    
-  }
+Widget hiddenGems() {
+  List<MunchModel> hiddenGemsList = MunchModelList.getDiningOptions(); // Assuming you have a different list for hidden gems
+
+  return Container(
+    color: Colors.white,
+    child: ListView.separated(
+      itemCount: hiddenGemsList.length,
+      scrollDirection: Axis.horizontal,
+      padding: const EdgeInsets.only(left: 10, right: 10),
+      separatorBuilder: (context, index) => const SizedBox(width: 25),
+      itemBuilder: (context, index) {
+        MunchModel munchModel = hiddenGemsList[index];
+
+        return InkWell(
+          onTap: () {
+            homeScaffold.currentState?.openEndDrawer();
+          },
+          child: Material(
+            elevation: 1,
+            borderRadius: BorderRadius.circular(20),
+            child: cardContents(munchModel),
+          ),
+        );
+      },
+    ),
+  );
+}
+
   
   Drawer rightDrawer() {
     return Drawer(
