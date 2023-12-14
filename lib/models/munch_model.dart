@@ -1,17 +1,49 @@
+import 'package:hive/hive.dart';
+
+part 'munch_model.g.dart'; // Generated file
+
+@HiveType(typeId: 0) // Unique ID for your type
 class MunchModel {
+  @HiveField(0)
   String owner;
+
+  @HiveField(1)
   String bgPath;
+
+  @HiveField(2)
   String name;
+
+  @HiveField(3)
   double avgRating;
+
+  @HiveField(4)
   String address;
+
+  @HiveField(5)
   Status status;
+
+  @HiveField(6)
   String shopHours;
+
+  @HiveField(7)
   PriceRange priceRange;
+
+  @HiveField(8)
   String gallery1;
+
+  @HiveField(9)
   String gallery2;
+
+  @HiveField(10)
   String gallery3;
+
+  @HiveField(11)
   String tag1;
+
+  @HiveField(12)
   String tag2;
+
+  @HiveField(13)
   String tag3;
 
   MunchModel({
@@ -48,37 +80,5 @@ class PriceRange {
   @override
   String toString() {
     return '₱$min - ₱$max';
-  }
-}
-
-class MunchModelList {
-  static List<MunchModel> diningOptions = getDiningOptions();
-
-  //this for when mu register listing, call MunchModelList.addDiningOption(stuff gi fill out) para maapil siya sa display... Then sa profile page, using "owner" attribute para ma filter which ones owned and ma edit
-  static void addDiningOption(MunchModel option) {
-    diningOptions.add(option);
-  }
-
-  static List<MunchModel> getDiningOptions() {
-    return [
-      //images are empty, but something like this
-      MunchModel(
-        owner: 'somebody',
-        bgPath: 'assets/images/whatever.png',
-        name: 'Restaurant Name',
-        avgRating: 4.5,
-        address: 'blalbalbalbala',
-        status: Status.open,
-        shopHours: 'Closes 9PM | Reopens 4PM',
-        priceRange: PriceRange(500, 3000),
-        gallery1: 'assets/images/gallery.png',
-        gallery2: 'assets/images/gallery.png',
-        gallery3: 'assets/images/gallery.png',
-        tag1: 'Spaghetti',
-        tag2: 'Pasta',
-        tag3: 'Italian',
-      ),
-      // add more samplesz
-    ];
   }
 }

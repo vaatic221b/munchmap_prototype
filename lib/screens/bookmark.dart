@@ -4,25 +4,25 @@ import 'package:munchmap_prototype/screens/settings.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
 
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+class BookmarkPage extends StatefulWidget {
+  const BookmarkPage({super.key});
 
   @override
-  State<ProfilePage> createState() => _ProfilePageState();
+  State<BookmarkPage> createState() => _BookmarkPageState();
 }
 
-class _ProfilePageState extends State<ProfilePage> {
-  final GlobalKey<ScaffoldState> profileScaffold = GlobalKey<ScaffoldState>();
+class _BookmarkPageState extends State<BookmarkPage> {
+  final GlobalKey<ScaffoldState> bookmarkScaffold = GlobalKey<ScaffoldState>();
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: menuOptions(context),
-      key: profileScaffold,
+      key: bookmarkScaffold,
       body: Stack(
         children: [
-          topBar(profileScaffold, context),
+          topBar(bookmarkScaffold, context),
         Padding(
           padding: const EdgeInsets.only(top: 82),
           child: SingleChildScrollView(
@@ -51,7 +51,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             children: [
                               Image.asset('assets/icons/bookmark_icon.png', height: 30),
                               const SizedBox(width: 8), 
-                              Text('Bookmarksz',
+                              Text('Bookmarks',
                                 style: TextStyle(
                                   fontFamily: GoogleFonts.montserrat().fontFamily,
                                   fontWeight: FontWeight.w500,
@@ -180,7 +180,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const ProfilePage(); 
+                      return const BookmarkPage(); 
                     },
                   ),
                 );

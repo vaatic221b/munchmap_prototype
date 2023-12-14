@@ -111,7 +111,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       width: 195,
                       height: 195,
                       child: Image.asset(
-                        'assets/images/welcome4.png',
+                        'assets/images/welcome/welcome4.png',
                         fit: BoxFit.cover, 
                       ),
                     ),
@@ -148,7 +148,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       width: 195,
                       height: 195,
                       child: Image.asset(
-                        'assets/images/welcome3.png',
+                        'assets/images/welcome/welcome3.png',
                         fit: BoxFit.cover, 
                       ),
                     ),
@@ -187,7 +187,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       width: 195,
                       height: 195,
                       child: Image.asset(
-                        'assets/images/welcome2.png',
+                        'assets/images/welcome/welcome2.png',
                         fit: BoxFit.cover, 
                       ),
                     ),
@@ -224,7 +224,7 @@ class _WelcomePageState extends State<WelcomePage> {
                       width: 195,
                       height: 195,
                       child: Image.asset(
-                        'assets/images/welcome1.png',
+                        'assets/images/welcome/welcome1.png',
                         fit: BoxFit.cover, 
                       ),
                     ),
