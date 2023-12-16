@@ -95,9 +95,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                         children: [
                                           const Icon(
                                             Icons.location_on,
-                                            color: Color(0xFFFF2215), // Customize the color as needed
+                                            color: Color(0xFFFF2215), 
                                           ),
-                                          const SizedBox(width: 2), // Add some spacing between the icon and text
+                                          const SizedBox(width: 2), 
                                           Text(
                                             bookmark.address,
                                             style: GoogleFonts.montserrat(
@@ -114,9 +114,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                         children: [
                                           const Icon(
                                             Icons.access_time,
-                                            color: Colors.blue, // Customize the color as needed
+                                            color: Colors.blue, 
                                           ),
-                                          const SizedBox(width: 2), // Add some spacing between the icon and text
+                                          const SizedBox(width: 2), 
                                           Text(
                                             bookmark.shopHours,
                                             style: GoogleFonts.montserrat(
@@ -133,9 +133,9 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                         children: [
                                           const Icon(
                                             Icons.notifications,
-                                            color: Colors.orange, // Customize the color as needed
+                                            color: Colors.orange, 
                                           ),
-                                          const SizedBox(width: 2), // Add some spacing between the icon and text
+                                          const SizedBox(width: 2), 
                                           Text(
                                             bookmark.note,
                                             style: GoogleFonts.montserrat(
@@ -176,7 +176,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                                 actions: [
                                                   ElevatedButton(
                                                     onPressed: () {
-                                                      // Save the edited note to the bookmark model
+                                                      // save note to bookmark
                                                       widget.hiveService.bookmarkBox.putAt(index, bookmark.copyWith(note: noteController.text));
                                                       Navigator.pop(context); 
                                                       setState(() {});
@@ -185,7 +185,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                                                   ),
                                                   TextButton(
                                                     onPressed: () {
-                                                      Navigator.pop(context); // Close the dialog without saving
+                                                      Navigator.pop(context); 
                                                     },
                                                     child: const Text('Cancel'),
                                                   ),

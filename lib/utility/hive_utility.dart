@@ -6,14 +6,14 @@ class HiveService {
 
   HiveService._privateConstructor();
 
-  // Create a static instance variable that will hold the single instance
+  
   static final HiveService _instance = HiveService._privateConstructor();
 
   factory HiveService() {
     return _instance;
   }
 
-  // Register the adapter for BookmarkModel
+  
   static void registerAdapters() {
     Hive.registerAdapter<BookmarkModel>(BookmarkModelAdapter());
   }

@@ -369,8 +369,8 @@ Widget build(BuildContext context) {
                             elevation: 1,
                             borderRadius: BorderRadius.circular(20),
                             child: Container(
-                              height: 130,
-                              width: 130,
+                              height: 100,
+                              width: 100,
                               decoration: BoxDecoration(
                                 image: DecorationImage(
                                   image: AssetImage(munchModel.bgPath),
@@ -386,12 +386,13 @@ Widget build(BuildContext context) {
                             width: 170,
                             color: Colors.white,
                             child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
                                   munchModel.name,
                                   style: GoogleFonts.montserrat(
-                                    fontSize: 12,
+                                    fontSize: 15,
                                     fontWeight: FontWeight.w600,
                                     color: const Color(0xFFFF2215),
                                   ),
@@ -400,7 +401,23 @@ Widget build(BuildContext context) {
                                 ),
                                 buildRatingStars(munchModel.avgRating),
                                 buildPesoIcons(munchModel.priceRange.max),
-                                Text(munchModel.address),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            size: 16,
+                                            Icons.location_on,
+                                            color: Color(0xFFFF2215), 
+                                          ),
+                                          const SizedBox(width: 2), 
+                                          Text(
+                                            munchModel.address,
+                                            style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
                               ],
                             ),
                           ),
