@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 
 class SettingsPage extends StatefulWidget {
-  const SettingsPage({super.key});
+  final HiveService hiveService;
+  const SettingsPage({super.key, required this.hiveService});
 
   @override
   State<SettingsPage> createState() => _SettingsPageState();
@@ -18,11 +20,11 @@ class _SettingsPageState extends State<SettingsPage> {
 Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer: menuOptions(context),
+      drawer: menuOptions(context, widget.hiveService),
       key: settingsScaffold,
       body: Stack(
         children: [
-          topBar(settingsScaffold, context),
+          topBar(settingsScaffold, context, widget.hiveService),
         Padding(
           padding: const EdgeInsets.only(top: 82),
           child: SingleChildScrollView(
@@ -128,7 +130,7 @@ Widget build(BuildContext context) {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const SettingsPage()),
+                              MaterialPageRoute(builder: (context) => SettingsPage(hiveService: widget.hiveService)),
                             );
                           },
                           child: Row(
@@ -152,7 +154,7 @@ Widget build(BuildContext context) {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const SettingsPage()),
+                              MaterialPageRoute(builder: (context) => SettingsPage(hiveService: widget.hiveService)),
                             );
                           },
                           child: Row(

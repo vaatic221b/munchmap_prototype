@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:munchmap_prototype/screens/home.dart';
 import 'package:munchmap_prototype/screens/signup.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class LoginPage extends StatefulWidget {
-  const LoginPage({super.key});
+  final HiveService hiveService;
+  const LoginPage({super.key, required this.hiveService});
 
   @override
   State<LoginPage> createState() => _LoginPageState();
 }
 
 class _LoginPageState extends State<LoginPage> {
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -18,7 +21,7 @@ class _LoginPageState extends State<LoginPage> {
         backgroundColor: const Color(0xFFFF2215),
         body: Center(
           child: Stack(
-            alignment: Alignment.center, 
+            alignment: Alignment.center,
             children: [
               munchmapTop(),
               mainBody(context),
@@ -28,7 +31,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
 
 //METHODS
   Positioned munchmapTop() {
@@ -95,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return const SignUpPage();
+                            return SignUpPage(hiveService: widget.hiveService);
                           },
                         ),
                       );
@@ -213,33 +215,33 @@ class _LoginPageState extends State<LoginPage> {
 
   ElevatedButton loginButton(BuildContext context) {
     return ElevatedButton(
-                      onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) {
-                              return const HomePage(); 
-                            },
-                          ),
-                        );
-                      },
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size(265, 45),
-                        backgroundColor: Colors.black, 
-                        foregroundColor: Colors.white, 
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10), 
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10), 
-                        ),
-                      ),
-                      child: Text(
-                        'Login',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 13,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ), 
-                    );
+      onPressed: () async {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) {
+              return HomePage(hiveService: widget.hiveService);
+            },
+          ),
+        );
+      },
+      style: ElevatedButton.styleFrom(
+        fixedSize: const Size(265, 45),
+        backgroundColor: Colors.black,
+        foregroundColor: Colors.white,
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10),
+        ),
+      ),
+      child: Text(
+        'Login',
+        style: GoogleFonts.montserrat(
+          fontSize: 13,
+          fontWeight: FontWeight.bold,
+        ),
+      ),
+    );
   }
   
 

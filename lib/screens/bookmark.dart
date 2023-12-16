@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:munchmap_prototype/screens/settings.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class BookmarkPage extends StatefulWidget {
-  const BookmarkPage({super.key});
+  final HiveService hiveService;
+  const BookmarkPage({Key? key, required this.hiveService});
 
   @override
   State<BookmarkPage> createState() => _BookmarkPageState();
@@ -18,11 +19,11 @@ class _BookmarkPageState extends State<BookmarkPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer: menuOptions(context),
+      drawer: menuOptions(context, widget.hiveService),
       key: bookmarkScaffold,
       body: Stack(
         children: [
-          topBar(bookmarkScaffold, context),
+          topBar(bookmarkScaffold, context, widget.hiveService),
         Padding(
           padding: const EdgeInsets.only(top: 82),
           child: SingleChildScrollView(
@@ -64,7 +65,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const BookmarkPage(); 
+                      return BookmarkPage(hiveService: widget.hiveService); 
                     },
                   ),
                 );

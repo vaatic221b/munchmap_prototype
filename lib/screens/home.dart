@@ -1,13 +1,17 @@
-
+// ignore_for_file: unrelated_type_equality_checks, library_private_types_in_public_api, avoid_print
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:munchmap_prototype/models/munch_model.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
+import 'package:munchmap_prototype/models/bookmark_model.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
+
 
 class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+  final HiveService hiveService;
+  const HomePage({Key? key, required this.hiveService});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -17,7 +21,7 @@ class _HomePageState extends State<HomePage> {
   final GlobalKey<ScaffoldState> homeScaffold = GlobalKey<ScaffoldState>();
   List<MunchModel> diningOptions = [];
 
-  void _getDiningOptions(){
+  void _getDiningOptions() {
     diningOptions = MunchModelList.getDiningOptions();
   }
 
@@ -25,18 +29,19 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     _getDiningOptions();
     return Scaffold(
-      drawer: menuOptions(context),
+      drawer: menuOptions(context, widget.hiveService), 
       key: homeScaffold,
       body: Stack(
         children: [
           mapDisplay(),
-          topBar(homeScaffold, context),
+          topBar(homeScaffold, context, widget.hiveService),
           foodDiscovery(),
         ],
       ),
     );
   }
 
+  //rest of the code, methods below
   Column foodDiscovery() {
     return Column(
           children: [
@@ -107,9 +112,6 @@ class _HomePageState extends State<HomePage> {
         );
   }
 
-
-
-
   Container mapDisplay() {
     return Container(
           height: 450,
@@ -121,7 +123,24 @@ class _HomePageState extends State<HomePage> {
           ),
         );
   }
-  
+
+  void _handleBookmarkChanged(bool isBookmarked, MunchModel munchModel) {
+    if (isBookmarked) {
+      // If bookmarked, add the current item to the bookmarkBox
+      widget.hiveService.bookmarkBox.add(BookmarkModel(
+        bgPath: munchModel.bgPath,
+        name: munchModel.name,
+        address: munchModel.address,
+        shopHours: munchModel.shopHours,
+        note: ' ',  // You can set a default value for the note, or leave it empty
+      ));
+    } else {
+      // If unbookmarked, you can remove the item from the bookmarkBox if needed
+      widget.hiveService.bookmarkBox.delete(munchModel.name); // Assuming 'name' is a unique identifier for your items
+    }
+  }
+
+
 Widget nearbyMunch() {
   return Container(
     color: Colors.white,
@@ -136,6 +155,7 @@ Widget nearbyMunch() {
             showModalBottomSheet(
               context: context,
               builder: (context) => RightDrawer(
+                hiveService: widget.hiveService,
                 bgPath: diningOptions[index].bgPath,
                 name: diningOptions[index].name,
                 avgRating: diningOptions[index].avgRating,
@@ -148,7 +168,11 @@ Widget nearbyMunch() {
                 gallery3: diningOptions[index].gallery3,
                 tag1: diningOptions[index].tag1,
                 tag2: diningOptions[index].tag2,
-                tag3: diningOptions[index].tag3
+                tag3: diningOptions[index].tag3,
+                isBookmarked: widget.hiveService.isBookmarked(diningOptions[index].name),
+                onBookmarkChanged: (isBookmarked) {
+                  _handleBookmarkChanged(isBookmarked, diningOptions[index]);
+                },
               ),
             );
           },
@@ -215,6 +239,7 @@ Widget hiddenGems() {
             showModalBottomSheet(
               context: context,
               builder: (context) => RightDrawer(
+                hiveService: widget.hiveService,
                 bgPath: diningOptions[index].bgPath,
                 name: diningOptions[index].name,
                 avgRating: diningOptions[index].avgRating,
@@ -227,7 +252,11 @@ Widget hiddenGems() {
                 gallery3: diningOptions[index].gallery3,
                 tag1: diningOptions[index].tag1,
                 tag2: diningOptions[index].tag2,
-                tag3: diningOptions[index].tag3
+                tag3: diningOptions[index].tag3,
+                isBookmarked: widget.hiveService.isBookmarked(diningOptions[index].name),
+                onBookmarkChanged: (isBookmarked) {
+                  _handleBookmarkChanged(isBookmarked, diningOptions[index]);
+                },
               ),
             );
           },
@@ -246,6 +275,7 @@ Widget hiddenGems() {
 }
 
 class RightDrawer extends StatefulWidget {
+  final HiveService hiveService;
   final String bgPath;
   final String name;
   final double avgRating;
@@ -259,8 +289,11 @@ class RightDrawer extends StatefulWidget {
   final String tag1;
   final String tag2;
   final String tag3;
+  final bool isBookmarked;
+  final ValueChanged<bool> onBookmarkChanged;
 
-  const RightDrawer({super.key, 
+  const RightDrawer({super.key,
+    required this.hiveService, 
     required this.bgPath,
     required this.name,
     required this.avgRating,
@@ -274,6 +307,8 @@ class RightDrawer extends StatefulWidget {
     required this.tag1,
     required this.tag2,
     required this.tag3,
+    required this.isBookmarked,
+    required this.onBookmarkChanged,
   });
 
   @override
@@ -282,6 +317,24 @@ class RightDrawer extends StatefulWidget {
 
 class _RightDrawerState extends State<RightDrawer> {
   bool isBookmarked = false;
+
+  void printBookmarkBoxContents() {
+    // Get all values in the bookmarkBox
+    List<BookmarkModel> bookmarks = widget.hiveService.bookmarkBox.values.toList();
+
+    // Print the contents
+    for (int i = 0; i < bookmarks.length; i++) {
+      BookmarkModel bookmark = bookmarks[i];
+      print("Bookmark $i:");
+      print("  Background Path: ${bookmark.bgPath}");
+      print("  Name: ${bookmark.name}");
+      print("  Address: ${bookmark.address}");
+      print("  Shop Hours: ${bookmark.shopHours}");
+      print("  Note: ${bookmark.note}");
+      print(""); // Empty line for separation
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -315,18 +368,30 @@ class _RightDrawerState extends State<RightDrawer> {
                           ),
                         ),
                       ),
-                      IconButton(
-                        iconSize: 35.0,
-                        icon: Icon(
-                          Icons.bookmark,
-                          color: isBookmarked ? Colors.red : Color.fromARGB(255, 218, 214, 214),
+                      SizedBox(
+                        width: 40,
+                        height: 40,
+                        child: ElevatedButton(
+                          onPressed: () {
+                            widget.onBookmarkChanged(!widget.isBookmarked);
+                            print(HiveService().bookmarkBox.values.toList());
+                            printBookmarkBoxContents();
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: const Color(0xFFFF2215),
+                            padding: const EdgeInsets.all(0), // Adjust padding as needed
+                          ),
+                          child: const Align(
+                            alignment: Alignment.center,
+                            child: Icon(
+                              Icons.bookmark,
+                              size: 30.0,
+                              color: Colors.white,
+                            ),
+                          ),
                         ),
-                        onPressed: () {
-                          setState(() {
-                            isBookmarked = !isBookmarked;
-                          });
-                        },
                       ),
+
                     ],
                   ),
                 ),
@@ -543,7 +608,7 @@ class _RightDrawerState extends State<RightDrawer> {
                         ),
                         ElevatedButton(
                           onPressed: () {
-                            
+                            widget.hiveService.clearBookmarkBox();
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: const Color(0xFFFF2215),
@@ -591,7 +656,7 @@ Widget buildGalleryImage(String imagePath) {
 
 Widget makeTag(String tag) {
   return Container(
-    padding: EdgeInsets.all(6),
+    padding: const EdgeInsets.all(6),
     decoration: BoxDecoration(
       color: Colors.black,
       borderRadius: BorderRadius.circular(12),
@@ -605,3 +670,5 @@ Widget makeTag(String tag) {
     ),
   );
 }
+
+

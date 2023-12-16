@@ -2,12 +2,16 @@
 
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:munchmap_prototype/models/munch_model.dart';
+import 'package:munchmap_prototype/screens/recomunch.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 
 class SearchPage extends StatefulWidget {
-  const SearchPage({super.key});
+  final HiveService hiveService;
+  const SearchPage({Key? key, required this.hiveService});
 
   @override
   State<SearchPage> createState() => _SearchPageState();
@@ -29,11 +33,11 @@ class _SearchPageState extends State<SearchPage> {
 Widget build(BuildContext context) {
   return Scaffold(
     backgroundColor: Colors.white,
-    drawer: menuOptions(context),
+    drawer: menuOptions(context, widget.hiveService),
     key: searchScaffold,
     body: Stack(
       children: [
-        topBar(searchScaffold, context),
+        topBar(searchScaffold, context, widget.hiveService),
         Padding(
           padding: const EdgeInsets.only(top: 82),
           child: SingleChildScrollView(
@@ -343,70 +347,73 @@ class ResultsWidget extends StatefulWidget {
 }
 
 class _ResultsWidgetState extends State<ResultsWidget> {
-  Color containerColor = Colors.blue;
-  bool isAlternateColor = false;
+  bool isReload = false;
 
 @override
 Widget build(BuildContext context) {
-  return Container(
-    color: containerColor,
-    child: ListView.separated(
-      itemCount: 4,
-      scrollDirection: Axis.vertical,
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      separatorBuilder: (context, index) => const SizedBox(height: 25),
-      itemBuilder: (context, index) {
-        return Row(
-          children: [
-            Material(
-                elevation: 1,
-                borderRadius: BorderRadius.circular(20),
-                child: Container(
-                      height: 130,
-                      width: 130,
-                      decoration: const BoxDecoration(
-                        image: DecorationImage(
-                          image: AssetImage('assets/images/nogallery.png'),
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-              ),
-              const SizedBox(width: 20),
-              Container(
-                height: 100, 
-                width: 170, 
-                color: Colors.white,
-                child: Column(
-                  children: [
-                    Text(
-                              'Name of Dining Option',
-                              style: GoogleFonts.montserrat(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w600,
-                                color: const Color(0xFFFF2215),
-                              ), 
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 2, 
+  List<MunchModel> diningOptions = MunchModelList.getDiningOptions();
+      if (isReload) {
+      diningOptions.shuffle();
+    }
+  return ListView.separated(
+                    itemCount: diningOptions.length, // Replace with the actual length of your list
+                    scrollDirection: Axis.vertical,
+                    padding: const EdgeInsets.symmetric(vertical: 10),
+                    separatorBuilder: (context, index) => const SizedBox(height: 25),
+                    itemBuilder: (context, index) {
+                      MunchModel munchModel = diningOptions[index]; // Replace munchModelList with your actual list
+
+                      return Row(
+                        children: [
+                          Material(
+                            elevation: 1,
+                            borderRadius: BorderRadius.circular(20),
+                            child: Container(
+                              height: 130,
+                              width: 130,
+                              decoration: BoxDecoration(
+                                image: DecorationImage(
+                                  image: AssetImage(munchModel.bgPath),
+                                  fit: BoxFit.cover,                              
+                                ),
+                                borderRadius: BorderRadius.circular(20)
+                              ),
                             ),
-                    const Text('Details'),
-                    const Text('Details'),
-                    const Text('Details'),
-                  ],
-                ),
-              )
-          ],
-        );
-      },
-    ),
-  );
+                          ),
+                          const SizedBox(width: 20),
+                          Container(
+                            height: 100,
+                            width: 170,
+                            color: Colors.white,
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  munchModel.name,
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 12,
+                                    fontWeight: FontWeight.w600,
+                                    color: const Color(0xFFFF2215),
+                                  ),
+                                  overflow: TextOverflow.ellipsis,
+                                  maxLines: 2,
+                                ),
+                                buildRatingStars(munchModel.avgRating),
+                                buildPesoIcons(munchModel.priceRange.max),
+                                Text(munchModel.address),
+                              ],
+                            ),
+                          ),
+                        ],
+                      );
+                    },
+                  );
 }
 
 
   void reloadResults() {
     setState(() {
-      containerColor = isAlternateColor ? Colors.red : Colors.blue;
-      isAlternateColor = !isAlternateColor;
+      isReload = !isReload;
     });
   }
 }

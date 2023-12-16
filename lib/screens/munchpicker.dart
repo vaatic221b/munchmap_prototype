@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class WheelPage extends StatefulWidget {
-  const WheelPage({super.key});
+  final HiveService hiveService;
+  const WheelPage({Key? key, required this.hiveService});
 
   @override
   State<WheelPage> createState() => _WheelPageState();
@@ -15,7 +17,7 @@ class _WheelPageState extends State<WheelPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: menuOptions(context),
+      drawer: menuOptions(context, widget.hiveService),
       key: wheelScaffold,
 
       body: Stack(
@@ -37,7 +39,7 @@ class _WheelPageState extends State<WheelPage> {
               ),
             ),
 
-          topBar(wheelScaffold, context),
+          topBar(wheelScaffold, context, widget.hiveService),
 
           Column(
             children: [

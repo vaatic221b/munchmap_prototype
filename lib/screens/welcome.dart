@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:munchmap_prototype/screens/login.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class WelcomePage extends StatefulWidget {
-  const WelcomePage({super.key});
+  final HiveService hiveService;
+  const WelcomePage({super.key, required this.hiveService});
 
   @override
   State<WelcomePage> createState() => _WelcomePageState();
@@ -78,7 +80,7 @@ class _WelcomePageState extends State<WelcomePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const LoginPage(); 
+                      return LoginPage(hiveService: widget.hiveService); 
                     },
                   ),
                 );

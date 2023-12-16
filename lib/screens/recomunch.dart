@@ -5,10 +5,12 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:munchmap_prototype/models/munch_model.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 
 class RecoPage extends StatefulWidget {
-  const RecoPage({super.key});
+  final HiveService hiveService;
+  const RecoPage({Key? key, required this.hiveService});
 
   @override
   State<RecoPage> createState() => _RecoPageState();
@@ -23,11 +25,11 @@ Widget build(BuildContext context) {
 
   return Scaffold(
     backgroundColor: Colors.white,
-    drawer: menuOptions(context),
+    drawer: menuOptions(context, widget.hiveService),
     key: recoScaffold,
     body: Stack(
       children: [
-        topBar(recoScaffold, context),
+        topBar(recoScaffold, context, widget.hiveService),
         Padding(
           padding: const EdgeInsets.only(top: 82),
           child: SingleChildScrollView(

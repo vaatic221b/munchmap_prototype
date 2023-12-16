@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:munchmap_prototype/screens/login.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class SignUpPage extends StatefulWidget {
-  const SignUpPage({super.key});
+  final HiveService hiveService;
+  const SignUpPage({super.key, required this.hiveService});
 
   @override
   State<SignUpPage> createState() => _SignUpPageState();
@@ -97,7 +99,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         context,
                         MaterialPageRoute(
                           builder: (context) {
-                            return const LoginPage();
+                            return LoginPage(hiveService: widget.hiveService);
                           },
                         ),
                       );

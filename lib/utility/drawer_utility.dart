@@ -6,8 +6,9 @@ import 'package:munchmap_prototype/screens/munchpicker.dart';
 import 'package:munchmap_prototype/screens/profile.dart';
 import 'package:munchmap_prototype/screens/recomunch.dart';
 import 'package:munchmap_prototype/screens/search.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart'; 
 
-Drawer menuOptions(BuildContext context) {
+Drawer menuOptions(BuildContext context, HiveService hiveService) {
     return Drawer(
       width: 60, 
       backgroundColor: const Color(0xFFFF2215),
@@ -29,7 +30,7 @@ Drawer menuOptions(BuildContext context) {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const HomePage(); 
+                              return HomePage(hiveService: hiveService); 
                             },
                           ),
                         );
@@ -51,7 +52,7 @@ Drawer menuOptions(BuildContext context) {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const SearchPage(); 
+                              return SearchPage(hiveService: hiveService);
                             },
                           ),
                         );
@@ -81,7 +82,7 @@ Drawer menuOptions(BuildContext context) {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const WheelPage(); 
+                              return WheelPage(hiveService: hiveService); //pass hiveService here too?
                             },
                           ),
                         );
@@ -111,7 +112,7 @@ Drawer menuOptions(BuildContext context) {
                           context,
                           MaterialPageRoute(
                             builder: (context) {
-                              return const RecoPage(); 
+                              return RecoPage(hiveService: hiveService); //pass hiveService here too?
                             },
                           ),
                         );
@@ -122,7 +123,7 @@ Drawer menuOptions(BuildContext context) {
     );
 }
 
-  Positioned topBar(GlobalKey<ScaffoldState> scaffoldKey, BuildContext context) {
+  Positioned topBar(GlobalKey<ScaffoldState> scaffoldKey, BuildContext context, HiveService hiveService) {
     return Positioned(
           top: 0,
           left: 0,
@@ -170,7 +171,7 @@ Drawer menuOptions(BuildContext context) {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => const ProfilePage()),
+                    MaterialPageRoute(builder: (context) => ProfilePage(hiveService: hiveService)), //pass hiveService here too?
                   );
                 },
                 

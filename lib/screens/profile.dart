@@ -4,9 +4,11 @@ import 'package:munchmap_prototype/screens/bookmark.dart';
 import 'package:munchmap_prototype/screens/settings.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
+import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
+  final HiveService hiveService;
+  const ProfilePage({Key? key, required this.hiveService});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -19,11 +21,11 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      drawer: menuOptions(context),
+      drawer: menuOptions(context, widget.hiveService),
       key: profileScaffold,
       body: Stack(
         children: [
-          topBar(profileScaffold, context),
+          topBar(profileScaffold, context, widget.hiveService),
         Padding(
           padding: const EdgeInsets.only(top: 82),
           child: SingleChildScrollView(
@@ -44,7 +46,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const BookmarkPage()),
+                              MaterialPageRoute(builder: (context) => BookmarkPage(hiveService: widget.hiveService)),
                             );
                           },
                           child: Row(
@@ -67,7 +69,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(builder: (context) => const SettingsPage()),
+                              MaterialPageRoute(builder: (context) => SettingsPage(hiveService: widget.hiveService)),
                             );
                           },
                           child: Row(
@@ -169,7 +171,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) {
-                      return const ProfilePage(); 
+                      return ProfilePage(hiveService: widget.hiveService); 
                     },
                   ),
                 );
