@@ -10,7 +10,7 @@ import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class RecoPage extends StatefulWidget {
   final HiveService hiveService;
-  const RecoPage({Key? key, required this.hiveService});
+  const RecoPage({super.key, required this.hiveService});
 
   @override
   State<RecoPage> createState() => _RecoPageState();

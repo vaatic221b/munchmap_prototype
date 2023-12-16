@@ -11,7 +11,7 @@ import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class HomePage extends StatefulWidget {
   final HiveService hiveService;
-  const HomePage({Key? key, required this.hiveService});
+  const HomePage({super.key, required this.hiveService});
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -132,7 +132,7 @@ class _HomePageState extends State<HomePage> {
         name: munchModel.name,
         address: munchModel.address,
         shopHours: munchModel.shopHours,
-        note: ' ',  // You can set a default value for the note, or leave it empty
+        note: "'Add Note Here'",  // You can set a default value for the note, or leave it empty
       ));
     } else {
       // If unbookmarked, you can remove the item from the bookmarkBox if needed
@@ -471,7 +471,8 @@ class _RightDrawerState extends State<RightDrawer> {
                                 const SizedBox(height: 3),
                                 Text(widget.shopHours,
                                 style: GoogleFonts.montserrat(
-                                  fontSize: 13
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12
                                 ),),
                               ],
                             )
@@ -512,7 +513,8 @@ class _RightDrawerState extends State<RightDrawer> {
                                 const SizedBox(height: 3),
                                 Text(widget.priceRange.toString(),
                                 style: GoogleFonts.montserrat(
-                                  fontSize: 13
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 12
                                 ),),
                               ],
                             )

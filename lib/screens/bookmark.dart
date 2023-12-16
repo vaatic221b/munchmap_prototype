@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:munchmap_prototype/models/bookmark_model.dart';
 import 'package:munchmap_prototype/utility/ad_utility.dart';
 import 'package:munchmap_prototype/utility/drawer_utility.dart';
 import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class BookmarkPage extends StatefulWidget {
   final HiveService hiveService;
-  const BookmarkPage({Key? key, required this.hiveService});
+  const BookmarkPage({super.key, required this.hiveService});
 
   @override
   State<BookmarkPage> createState() => _BookmarkPageState();
@@ -17,6 +18,7 @@ class _BookmarkPageState extends State<BookmarkPage> {
 
   @override
   Widget build(BuildContext context) {
+    List<BookmarkModel> bookmarks = widget.hiveService.bookmarkBox.values.toList();
     return Scaffold(
       backgroundColor: Colors.white,
       drawer: menuOptions(context, widget.hiveService),
@@ -39,15 +41,190 @@ class _BookmarkPageState extends State<BookmarkPage> {
                 const SizedBox(height: 2),
                 Padding(
                   padding: const EdgeInsets.all(15.0),
-                  child: Container(
+                  child: SizedBox(
                     height: 580,
-                    decoration: const BoxDecoration(
-                      color: Colors.amber,
+                    child: ListView.separated(
+                      itemCount: bookmarks.length, 
+                      scrollDirection: Axis.vertical,
+                      padding: const EdgeInsets.symmetric(vertical: 10),
+                      separatorBuilder: (context, index) => const SizedBox(height: 25),
+                      itemBuilder: (context, index) {
+                        BookmarkModel bookmark = bookmarks[index]; 
+
+                        return Center(
+                          child: SizedBox(
+                            height: 130,
+                            width: 350,
+                            child: Row(
+                              children: [
+                                Material(
+                                  elevation: 1,
+                                  borderRadius: BorderRadius.circular(20),
+                                  child: Container(
+                                    height: 130,
+                                    width: 105,
+                                    decoration: BoxDecoration(
+                                      image: DecorationImage(
+                                        image: AssetImage(bookmark.bgPath),
+                                        fit: BoxFit.cover,                              
+                                      ),
+                                      borderRadius: BorderRadius.circular(20)
+                                    ),
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Container(
+                                  height: 130,
+                                  width: 175,
+                                  color: Colors.white,
+                                  child: Column(
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        bookmark.name,
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 15,
+                                          fontWeight: FontWeight.w600,
+                                          color: const Color(0xFFFF2215),
+                                        ),
+                                        overflow: TextOverflow.ellipsis,
+                                        maxLines: 2,
+                                      ),
+                                      const SizedBox(height: 2),
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.location_on,
+                                            color: Color(0xFFFF2215), // Customize the color as needed
+                                          ),
+                                          const SizedBox(width: 2), // Add some spacing between the icon and text
+                                          Text(
+                                            bookmark.address,
+                                            style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 2),
+
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.access_time,
+                                            color: Colors.blue, // Customize the color as needed
+                                          ),
+                                          const SizedBox(width: 2), // Add some spacing between the icon and text
+                                          Text(
+                                            bookmark.shopHours,
+                                            style: GoogleFonts.montserrat(
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                      const SizedBox(height: 2),
+                                      
+                                      Row(
+                                        children: [
+                                          const Icon(
+                                            Icons.notifications,
+                                            color: Colors.orange, // Customize the color as needed
+                                          ),
+                                          const SizedBox(width: 2), // Add some spacing between the icon and text
+                                          Text(
+                                            bookmark.note,
+                                            style: GoogleFonts.montserrat(
+                                              fontSize: 13,
+                                              fontStyle: FontStyle.italic,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+
+                                    ],
+                                  ),
+                                ),
+                                const SizedBox(width: 10),
+                                Container(
+                                  height: 110,
+                                  width: 50,
+                                  color: Colors.red,
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      IconButton(
+                                        onPressed: () {
+                                          TextEditingController noteController = TextEditingController(text: bookmark.note);
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              return AlertDialog(
+                                                title: const Text('Edit Note'),
+                                                content: TextField(
+                                                  controller: noteController,
+                                                  decoration: const InputDecoration(
+                                                    hintText: 'Enter new note',
+                                                  ),
+                                                ),
+                                                actions: [
+                                                  ElevatedButton(
+                                                    onPressed: () {
+                                                      // Save the edited note to the bookmark model
+                                                      widget.hiveService.bookmarkBox.putAt(index, bookmark.copyWith(note: noteController.text));
+                                                      Navigator.pop(context); 
+                                                      setState(() {});
+                                                    },
+                                                    child: const Text('Save'),
+                                                  ),
+                                                  TextButton(
+                                                    onPressed: () {
+                                                      Navigator.pop(context); // Close the dialog without saving
+                                                    },
+                                                    child: const Text('Cancel'),
+                                                  ),
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(Icons.edit, color: Colors.white),
+                                      ),
+
+                                      const Divider(
+                                        height: 5,
+                                        thickness: 5,
+                                        color: Colors.white,
+                                      ),
+
+                                      IconButton(
+                                        onPressed: () {
+                                          widget.hiveService.bookmarkBox.deleteAt(index);
+                                          setState(() {
+                                            bookmarks.removeAt(index);
+                                          });
+                                        },
+                                        icon: const Icon(Icons.delete, color: Colors.white),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
                     ),
                   ),
                 ),
                 
-                advertisement(),
+                const AdvertisementWidget(),
 
               ],
             ),
@@ -91,4 +268,13 @@ class _BookmarkPageState extends State<BookmarkPage> {
             );
   }
 
+}
+
+class AdvertisementWidget extends StatelessWidget {
+  const AdvertisementWidget({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return advertisement();
+  }
 }

@@ -19,9 +19,9 @@ class BookmarkModelAdapter extends TypeAdapter<BookmarkModel> {
     return BookmarkModel(
       bgPath: fields[0] as String,
       name: fields[1] as String,
-      address: fields[3] as String,
-      shopHours: fields[4] as String,
-      note: fields[6] as String,
+      address: fields[2] as String,
+      shopHours: fields[3] as String,
+      note: fields[4] as String,
     );
   }
 
@@ -33,11 +33,11 @@ class BookmarkModelAdapter extends TypeAdapter<BookmarkModel> {
       ..write(obj.bgPath)
       ..writeByte(1)
       ..write(obj.name)
-      ..writeByte(3)
+      ..writeByte(2)
       ..write(obj.address)
-      ..writeByte(4)
+      ..writeByte(3)
       ..write(obj.shopHours)
-      ..writeByte(6)
+      ..writeByte(4)
       ..write(obj.note);
   }
 

@@ -5,7 +5,7 @@ import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class WheelPage extends StatefulWidget {
   final HiveService hiveService;
-  const WheelPage({Key? key, required this.hiveService});
+  const WheelPage({super.key, required this.hiveService});
 
   @override
   State<WheelPage> createState() => _WheelPageState();

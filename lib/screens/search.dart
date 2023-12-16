@@ -11,7 +11,7 @@ import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class SearchPage extends StatefulWidget {
   final HiveService hiveService;
-  const SearchPage({Key? key, required this.hiveService});
+  const SearchPage({super.key, required this.hiveService});
 
   @override
   State<SearchPage> createState() => _SearchPageState();

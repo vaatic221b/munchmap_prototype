@@ -10,13 +10,13 @@ class BookmarkModel {
   @HiveField(1)
   String name;
 
-  @HiveField(3)
+  @HiveField(2)
   String address;
 
-  @HiveField(4)
+  @HiveField(3)
   String shopHours;
 
-  @HiveField(6)
+  @HiveField(4)
   String note; // the new property to allow user to leave a note or message on each bookmark
 
 
@@ -28,4 +28,20 @@ class BookmarkModel {
     required this.note
 
   });
+
+    BookmarkModel copyWith({
+    String? bgPath,
+    String? name,
+    String? address,
+    String? shopHours,
+    String? note,
+  }) {
+    return BookmarkModel(
+      bgPath: bgPath ?? this.bgPath,
+      name: name ?? this.name,
+      address: address ?? this.address,
+      shopHours: shopHours ?? this.shopHours,
+      note: note ?? this.note,
+    );
+  }
 }

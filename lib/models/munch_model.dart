@@ -94,7 +94,7 @@ class MunchModelList {
         avgRating: 4.4,
         address: 'Maple Street',
         status: Status.closed,
-        shopHours: '6:00 AM to 8:00 PM',
+        shopHours: '12:00 AM to 12:00 PM',
         priceRange: PriceRange(800, 1000),
         gallery1: 'assets/images/nogallery.png',
         gallery2: 'assets/images/nogallery.png',

@@ -8,7 +8,7 @@ import 'package:munchmap_prototype/utility/hive_utility.dart';
 
 class ProfilePage extends StatefulWidget {
   final HiveService hiveService;
-  const ProfilePage({Key? key, required this.hiveService});
+  const ProfilePage({super.key, required this.hiveService});
 
   @override
   State<ProfilePage> createState() => _ProfilePageState();
@@ -115,7 +115,7 @@ class _ProfilePageState extends State<ProfilePage> {
                           child: Container(
                             height: 100,                              
                             color: Colors.white,
-                            child: Center(child: const Text("You don't have any listings yet...")),
+                            child: const Center(child: Text("You don't have any listings yet...")),
 
                           ),
                         ),
